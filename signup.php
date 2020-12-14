@@ -11,6 +11,7 @@ $username_err = $password_err = $email_err = $confirm_password_err =  "";
 if($_SERVER["REQUEST_METHOD"] == "POST"){
  
     // Validatar username
+   
     if(empty(trim($_POST["username"]))){
         $username_err = "Please enter a username.";
     } else{
@@ -24,6 +25,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             // Set parameters
             $param_email = trim($_POST["email"]);
             echo  $email;
+            session_start();
+            $_SESSION['email'] = $param_email;
 
             
             // Attempt to execute the prepared statement
@@ -35,10 +38,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     $email_err = "Esse email já foi utilizado.";
                 } else{
                     $username = trim($_POST["username"]);
+                    $email = trim($_POST["email"]);
+
                    
                 }
             } else{
-                echo "Oops! Something went wrong. Please try again later.";
+                echo "Oops! Algo deu errado.Tente novamente.";
             }
 
             // Close statement
@@ -82,10 +87,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             
             // if para executar a query e ver se foi realizada com sucesso
             if(mysqli_stmt_execute($stmt)){
+                
+
                 // Redirecioar para página de login mas por enquando será para index na intenção de teste 
-                header("location: index.php");
+                header("location: login.php");
+                
             } else{
                 echo "Algo deu errado por favor tente novamente depois.";
+
             }
 
             // Fechar query sql
